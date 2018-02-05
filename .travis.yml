@@ -1,0 +1,12 @@
+language: python
+
+python:
+  - 3.6.1
+
+install:
+  - pip install -r requirements.txt
+  - nvm install 9.2.0
+  - npm install --no-optional
+
+script:
+  - npm run test
