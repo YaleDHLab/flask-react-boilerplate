@@ -1,9 +1,9 @@
 {
-  "name": "let-them-speak",
+  "name": "flask-react-boilerplate",
   "version": "0.1.0",
   "author": "Yale DH Lab",
   "license": "MIT",
-  "description": "An archive of Holocaust survivor testimonies",
+  "description": "Minimal boilerplate for a Flask + React application",
   "main": "server/server.js",
   "repository": {
     "type": "git",
