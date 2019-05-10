@@ -10,15 +10,15 @@
     "url": "git+https://github.com/duhaime/react-boilerplate.git"
   },
   "scripts": {
-    "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --port 7081 --history-api-fallback",
-    "build": "./node_modules/webpack/bin/webpack.js --config webpack.config.js",
-    "compress": "./node_modules/webpack/bin/webpack.js --config webpack.config.js",
+    "start": "webpack-dev-server --port 7081 --history-api-fallback",
+    "build": "webpack --config webpack.config.js",
+    "compress": "webpack --config webpack.config.js",
     "production": "npm run build && npm run serve",
     "serve": "FLASK_APP=server/app.py flask run --port=7082",
-    "lint-js": "./node_modules/eslint/bin/eslint.js -c './src/config/.eslintrc.js' src/",
+    "lint-js": "eslint.js -c './src/config/.eslintrc.js' src/",
     "lint-py": "pylint server/app.py",
     "lint": "npm run lint-js && npm run lint-py",
-    "jest": "./node_modules/jest/bin/jest.js",
+    "jest": "jest.js",
     "test": "npm run build && npm run lint && npm run jest && pytest"
   },
   "dependencies": {
@@ -36,7 +36,10 @@
     "redux-form": "^7.0.4",
     "redux-freeze": "^0.1.5",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "webpack": "3.5.6",
+    "webpack-cli": "^3.3.2",
+    "webpack-merge": "^4.1.0"
   },
   "devDependencies": {
     "babel-core": "^6.17.0",
@@ -63,9 +66,7 @@
     "prop-types": "^15.5.10",
     "react-test-renderer": "^15.2.0",
     "style-loader": "^0.18.2",
-    "webpack": "^3.5.6",
-    "webpack-dev-server": "^2.11.1",
-    "webpack-merge": "^4.1.0"
+    "webpack-dev-server": "^2.11.1"
   },
   "babel": {
     "presets": [
