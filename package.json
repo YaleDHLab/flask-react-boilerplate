@@ -15,10 +15,10 @@
     "compress": "webpack --config webpack.config.js",
     "production": "npm run build && npm run serve",
     "serve": "FLASK_APP=server/app.py flask run --port=7082",
-    "lint-js": "eslint.js -c './src/config/.eslintrc.js' src/",
+    "lint-js": "eslint -c './src/config/.eslintrc.js' src/",
     "lint-py": "pylint server/app.py",
     "lint": "npm run lint-js && npm run lint-py",
-    "jest": "jest.js",
+    "jest": "jest",
     "test": "npm run build && npm run lint && npm run jest && pytest"
   },
   "dependencies": {
