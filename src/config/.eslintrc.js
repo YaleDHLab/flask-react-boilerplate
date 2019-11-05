@@ -3,12 +3,8 @@ module.exports = {
     "browser": true,
     "commonjs": true,
     "es6": true,
-    "jest": true
-  },
-  "globals": {
-    "process": {
-      "env": "development"
-    }
+    "jest": true,
+    "node": true,
   },
   "extends": "eslint:recommended",
   "rules": {
@@ -22,13 +18,13 @@ module.exports = {
     "react/jsx-uses-vars": [ 2 ],
   },
   "plugins": [
-    "react"
+    "react",
   ],
   "parser": "babel-eslint",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true,
-      "modules": true
+      "modules": true,
     }
   }
 };

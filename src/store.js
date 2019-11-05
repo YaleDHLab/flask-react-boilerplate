@@ -1,19 +1,19 @@
 import { createStore, applyMiddleware } from 'redux';
-import { routerMiddleware, connectRouter } from 'connected-react-router';
+import { routerMiddleware } from 'connected-react-router';
+import { rootReducer } from './reducers/index';
 import { createBrowserHistory } from 'history';
+import { fetchItems } from './actions/items';
 import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
-import { rootReducer } from './reducers/index';
-import freeze from 'redux-freeze';
-import { fetchItems } from './actions/items';
 import config from './config/client';
+import freeze from 'redux-freeze';
 
 const history = createBrowserHistory();
 const loggerMiddleware = createLogger();
 
 let middlewares = [
-  routerMiddleware(history),
   thunkMiddleware,
+  routerMiddleware(history)
 ];
 
 // add the freeze dev middleware
@@ -22,13 +22,10 @@ if (process.env.NODE_ENV !== 'production') {
   middlewares.push(loggerMiddleware)
 }
 
-// apply the middleware
-let middleware = applyMiddleware(...middlewares);
-
 // create the store
 const store = createStore(
-  connectRouter(history)(rootReducer),
-  middleware,
+  rootReducer(history),
+  applyMiddleware(...middlewares),
 );
 
 // initialize app state
