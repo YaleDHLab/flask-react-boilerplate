@@ -1,4 +1,4 @@
-import { compose, createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { routerMiddleware } from 'connected-react-router';
 import { rootReducer } from './reducers/index';
 import { createBrowserHistory } from 'history';
