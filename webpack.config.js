@@ -1,10 +1,10 @@
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const merge = require('webpack-merge');
-const webpack = require('webpack'); 
+const webpack = require('webpack');
 const path = require('path');
 
 const paths = {
@@ -12,27 +12,25 @@ const paths = {
   build: path.resolve(__dirname, 'build')
 }
 
-const uglifyConfig = {
-  sourceMap: false,
-  warnings: false,
-  mangle: true,
-  minimize: true
-}
-
 const htmlConfig = {
   template: path.join(paths.src, 'index.html'),
   minify : {
-    collapseWhitespace: true
+    collapseWhitespace: true,
   }
 }
 
 const common = {
-  devServer: {
-    contentBase: path.join(__dirname, 'build'),
-  },
   entry: path.join(paths.src, 'index.js'),
   resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx']
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+  },
+  output: {
+    path: paths.build,
+    filename: 'bundle.[hash].js',
+    publicPath: '/',
+  },
+  performance: {
+    hints: false,
   },
   module: {
     rules: [
@@ -42,7 +40,7 @@ const common = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['env']
+            presets: ['@babel/env']
           }
         }
       },
@@ -58,10 +56,15 @@ const common = {
       },
       {
         test: /\.(css)$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: 'css-loader'
-        })
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              hmr: process.env.NODE_ENV === 'development',
+            },
+          },
+          'css-loader',
+        ],
       },
       {
         test: /\.(png|jpg|gif)$/,
@@ -76,9 +79,13 @@ const common = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin([paths.build]),
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin(htmlConfig),
-    new ExtractTextPlugin('styles.[contenthash].css'),
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[id].css',
+      ignoreOrder: false,
+    }),
   ]
 };
 
@@ -86,30 +93,23 @@ const devSettings = {
   devtool: 'eval-source-map',
   devServer: {
     historyApiFallback: true,
-  },
-  output: {
-    path: paths.build,
-    filename: 'bundle.[hash].js',
-    publicPath: '/'
+    quiet: false,
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new CleanWebpackPlugin([paths.build]),
+    new CleanWebpackPlugin(),
   ]
 }
 
 const prodSettings = {
-  devtool: 'source-map',
-  output: {
-    path: paths.build,
-    filename: 'bundle.[hash].js',
-    publicPath: '/build/'
+  optimization: {
+    minimize: true,
   },
+  devtool: 'source-map',
   plugins: [
     new webpack.DefinePlugin({ 'process.env': {
       NODE_ENV: JSON.stringify('production')
     }}),
-    new webpack.optimize.UglifyJsPlugin(uglifyConfig),
     new OptimizeCssAssetsPlugin(),
     new webpack.optimize.OccurrenceOrderPlugin(),
   ]
